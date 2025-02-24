@@ -1,8 +1,8 @@
 import jwt from "jsonwebtoken";
 
-function userAuth(req: string, res, next) {
+function userAuth(req: any, res: any, next: any) {
   const authorization = req.headers.authorization;
-  const splitAuth = authorization.spli(" ");
+  const splitAuth = authorization.split(" ");
   const token = splitAuth[1];
 
   if (!token) {
@@ -12,12 +12,15 @@ function userAuth(req: string, res, next) {
   }
 
   try {
-    const decodedInfo = jwt.verify(token, `${process.env.JWT_USER_SECRET}`);
+    const decodedInfo: any = jwt.verify(
+      token,
+      `${process.env.JWT_USER_SECRET}`
+    );
 
     req.userId = decodedInfo._id;
     next();
   } catch (error) {
-    res.json({
+    res.status(403).json({
       message: "Invalid or expired session",
     });
   }
