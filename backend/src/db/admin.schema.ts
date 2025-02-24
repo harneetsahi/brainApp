@@ -1,6 +1,6 @@
 import { Model, Schema } from "mongoose";
 
-const userSchema = new Schema(
+const adminSchema = new Schema(
   {
     firstName: {
       type: String,
@@ -27,4 +27,4 @@ const userSchema = new Schema(
   { timestamps: true }
 );
 
-export const User = new Model("User", userSchema);
+export const Admin = new Model("Admin", adminSchema);

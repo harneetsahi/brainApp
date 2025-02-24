@@ -1,7 +1,8 @@
 import { Router } from "express";
+import userAuth from "../middlewares/user.auth";
 import {
-  signup,
-  login,
+  userSignup,
+  userLogin,
   postContent,
   getContent,
   deleteContent,
@@ -9,20 +10,22 @@ import {
   getSharedContent,
 } from "../controllers/user.controllers";
 
-const router = Router();
+const userRouter = Router();
 
-router.route("/api/v1/signup").post(signup);
+userRouter.route("/api/v1/signup").post(userSignup);
 
-router.route("/api/v1/login").post(login);
+userRouter.route("/api/v1/login").post(userLogin);
 
-router.route("/api/v1/content").post(postContent);
+userRouter.use(userAuth);
 
-router.route("/api/v1/content").get(getContent);
+userRouter.route("/api/v1/content").post(postContent);
 
-router.route("/api/v1/content").delete(deleteContent);
+userRouter.route("/api/v1/content").get(getContent);
 
-router.route("/api/v1/brain/share").post(shareContent);
+userRouter.route("/api/v1/content").delete(deleteContent);
 
-router.route("/api/v1/brain/:shareLink").get(getSharedContent);
+userRouter.route("/api/v1/brain/share").post(shareContent);
 
-export default router;
+userRouter.route("/api/v1/brain/:shareLink").get(getSharedContent);
+
+export default userRouter;
