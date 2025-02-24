@@ -12,7 +12,8 @@ function userAuth(req: string, res, next) {
   }
 
   try {
-    const decodedInfo = jwt.verify(token, process.env.JWT_USER_SECRET);
+    const decodedInfo = jwt.verify(token, `${process.env.JWT_USER_SECRET}`);
+
     req.userId = decodedInfo._id;
     next();
   } catch (error) {

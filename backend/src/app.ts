@@ -4,6 +4,8 @@ const app = express();
 
 app.use(express.json());
 
-import 
+import userRouter from "./routes/user.routes";
 
-app.listen(process.env.PORT);
+app.use("/api/v1/users", userRouter);
+
+export { app };

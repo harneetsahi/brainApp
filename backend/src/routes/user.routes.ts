@@ -12,20 +12,20 @@ import {
 
 const userRouter = Router();
 
-userRouter.route("/api/v1/signup").post(userSignup);
+userRouter.route("/signup").post(userSignup);
 
-userRouter.route("/api/v1/login").post(userLogin);
+userRouter.route("/login").post(userLogin);
 
 userRouter.use(userAuth);
 
-userRouter.route("/api/v1/content").post(postContent);
+userRouter.route("/content").post(postContent);
 
-userRouter.route("/api/v1/content").get(getContent);
+userRouter.route("/content").get(getContent);
 
-userRouter.route("/api/v1/content").delete(deleteContent);
+userRouter.route("/content").delete(deleteContent);
 
-userRouter.route("/api/v1/brain/share").post(shareContent);
+userRouter.route("/brain/share").post(shareContent);
 
-userRouter.route("/api/v1/brain/:shareLink").get(getSharedContent);
+userRouter.route("/brain/:shareLink").get(getSharedContent);
 
 export default userRouter;
