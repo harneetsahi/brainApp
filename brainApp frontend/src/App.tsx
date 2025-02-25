@@ -1,11 +1,24 @@
-import { useState } from "react";
+// import { useState } from "react";
+import { PlusIcon } from "./icons/PlusIcon";
+
+import { Button } from "./components/Button";
+import { ShareIcon } from "./icons/ShareIcon";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
     <>
-      <div>hi brainApp</div>
+      <Button
+        variant="secondary"
+        text="Share Brain"
+        size="md"
+        startIcon={<ShareIcon size="md" />}
+      />
+      <Button
+        variant="primary"
+        text="Add Content"
+        size="md"
+        startIcon={<PlusIcon size="md" />}
+      />
     </>
   );
 }
