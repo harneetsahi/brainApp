@@ -107,7 +107,10 @@ async function getContent(req: any, res: any) {
   const userId = req.userId;
 
   try {
-    const contents = await Content.find({ userId });
+    const contents = await Content.find({ userId }).populate(
+      "userId",
+      "firstName"
+    );
 
     return res.json({
       message: "All your posts",
@@ -149,26 +152,40 @@ async function deleteContent(req: any, res: any) {
 
 //
 
-// async function shareContent(req, res) {
-//   res.status(200).json({
-//     message: "share link",
-//   });
-// }
+async function shareContent(req: any, res: any) {
+  const userId = req.userId;
+  const { contentId } = req.body;
+
+  try {
+    const content = await Content.findOne({ userId, _id: contentId }).select(
+      "link"
+    );
+
+    return res.json({
+      message: "Here is your content to share",
+      content: content,
+    });
+  } catch (error) {
+    res.json({
+      message: "Unable to share content due to server error",
+    });
+  }
+}
 
 //
 
-// async function getSharedContent(req, res) {
-//   res.status(200).json({
-//     message: "fetched shared link",
-//   });
-// }
+async function getSharedContent(req: any, res: any) {
+  res.status(200).json({
+    message: "fetched shared link",
+  });
+}
 
 export {
   userSignup,
   userLogin,
-  //   postContent,
-  //   getContent,
-  //   deleteContent,
-  //   shareContent,
-  //   getSharedContent,
+  postContent,
+  getContent,
+  deleteContent,
+  shareContent,
+  getSharedContent,
 };
