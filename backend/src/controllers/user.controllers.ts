@@ -175,9 +175,28 @@ async function shareContent(req: any, res: any) {
 //
 
 async function getSharedContent(req: any, res: any) {
-  res.status(200).json({
-    message: "fetched shared link",
-  });
+  const { shareLink } = req.params;
+
+  console.log(req.params);
+
+  try {
+    const content = await Content.findOne({ _id: shareLink }).select("link");
+
+    if (content) {
+      res.status(200).json({
+        message: "fetched shared link",
+        link: content,
+      });
+    } else {
+      res.json({
+        message: "Content not found",
+      });
+    }
+  } catch (error) {
+    res.json({
+      message: "Unable to fetch content due to server error",
+    });
+  }
 }
 
 export {
