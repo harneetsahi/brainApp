@@ -6,16 +6,16 @@ interface ButtonProps {
   text: string;
   startIcon?: ReactElement;
   endIcon?: ReactElement;
-  onClick?: () => void;
+  // onClick?: () => void;
 }
 
 const variantStyles = {
-  primary: "bg-indigo-600 text-indigo-200",
-  secondary: "bg-indigo-200 text-indigo-600",
+  primary: "bg-zinc-800 text-gray-300",
+  secondary: "bg-zinc-200 text-gray-800",
 };
 
 const defaultStyles =
-  "px-5 py-2.5 mr-2 cursor-pointer hover:shadow-lg rounded-lg flex gap-2 items-center";
+  "px-5 py-2.5 cursor-pointer hover:shadow-lg rounded-lg flex gap-2 items-center";
 
 const sizeVariant = {
   sm: "px-3 py-2 text-sm",
@@ -28,9 +28,10 @@ export const Button = ({ variant, text, size, startIcon }: ButtonProps) => {
     <>
       <button
         className={`${variantStyles[variant]} ${defaultStyles} ${sizeVariant[size]}`}
-        onClick={() => console.log("clicked")}
+        // onClick={() => console.log("clicked")}
       >
-        {startIcon} {text}
+        {startIcon}
+        <span className="hidden sm:inline">{text}</span>
       </button>
     </>
   );

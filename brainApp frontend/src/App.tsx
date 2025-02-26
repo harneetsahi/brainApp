@@ -1,22 +1,17 @@
-import { Button } from "./components/Button";
-import { PlusIcon } from "./icons/PlusIcon";
-import { ShareIcon } from "./icons/ShareIcon";
+import { Header } from "./components/Header";
+import { Sidebar } from "./components/Sidebar";
 
 function App() {
   return (
     <>
-      <Button
-        variant={"secondary"}
-        text={"Share Brain"}
-        size={"md"}
-        startIcon={<ShareIcon size={"md"} />}
-      />
-      <Button
-        variant={"primary"}
-        text={"Add Content"}
-        size={"md"}
-        startIcon={<PlusIcon size={"md"} />}
-      />
+      <div className="flex">
+        <div className="">
+          <Sidebar />
+        </div>
+        <main className="ml-50 flex-1">
+          <Header />
+        </main>
+      </div>
     </>
   );
 }
