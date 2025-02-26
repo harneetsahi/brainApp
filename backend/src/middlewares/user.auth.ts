@@ -17,7 +17,6 @@ function userAuth(req: any, res: any, next: any) {
       `${process.env.JWT_USER_SECRET}`
     );
 
-    console.log(decodedInfo);
     req.userId = decodedInfo.id;
     next();
   } catch (error) {

@@ -1,8 +1,10 @@
 import jwt from "jsonwebtoken";
 import { z } from "zod";
 import bcrypt from "bcrypt";
-import { User } from "../db/user.schema";
-import { Content } from "../db/content.schema";
+import { User } from "../schema/user.schema";
+import { Content } from "../schema/content.schema";
+import { Link } from "../schema/link.schema";
+import random from "../utils";
 
 async function userSignup(req: any, res: any) {
   const requiredBody = z.object({
@@ -154,20 +156,37 @@ async function deleteContent(req: any, res: any) {
 
 async function shareContent(req: any, res: any) {
   const userId = req.userId;
-  const { contentId } = req.body;
+  const { share } = req.body;
 
   try {
-    const content = await Content.findOne({ userId, _id: contentId }).select(
-      "link"
-    );
+    if (share) {
+      const linkAlreadyExists = await Link.findOne({ userId });
 
-    return res.json({
-      message: "Here is your content to share",
-      content: content,
-    });
+      if (linkAlreadyExists) {
+        return res.json({
+          message: "Link already exists",
+          hash: "/share/" + linkAlreadyExists.hash,
+        });
+      }
+
+      const hash = random(10);
+
+      await Link.create({ hash: hash, userId });
+
+      res.json({
+        message: "Shareable link updated",
+        link: "/share/" + hash,
+      });
+    } else {
+      await Link.deleteOne({ userId });
+
+      res.json({
+        message: "Removed link",
+      });
+    }
   } catch (error) {
     res.json({
-      message: "Unable to share content due to server error",
+      message: "Unable to share content",
     });
   }
 }
@@ -177,21 +196,30 @@ async function shareContent(req: any, res: any) {
 async function getSharedContent(req: any, res: any) {
   const { shareLink } = req.params;
 
-  console.log(req.params);
-
   try {
-    const content = await Content.findOne({ _id: shareLink }).select("link");
+    const link = await Link.findOne({ hash: shareLink });
 
-    if (content) {
-      res.status(200).json({
-        message: "fetched shared link",
-        link: content,
-      });
-    } else {
-      res.json({
+    if (!link) {
+      res.status(411).json({
         message: "Content not found",
       });
+      return;
     }
+
+    //
+    const content = await Content.find({ userId: link.userId });
+
+    const user = await User.findOne({ _id: link.userId });
+
+    if (!user) {
+      res.status(411).json({ message: "user not found" });
+      return;
+    }
+
+    res.json({
+      user: user.firstName,
+      content: content,
+    });
   } catch (error) {
     res.json({
       message: "Unable to fetch content due to server error",
