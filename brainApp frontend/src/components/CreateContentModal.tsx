@@ -4,9 +4,14 @@ import { InputDiv } from "./InputComponent";
 
 const labelStyle = "flex flex-col  text-gray-300 mb-1 capitalize";
 const inputStyle =
-  "w-full bg-gray-200 px-3 py-2 text-gray-800 rounded-lg mb-3 font-light ";
+  "w-full bg-gray-200 px-3 py-2.5 text-gray-800 rounded-lg mb-3 font-light ";
 
-export const CreateContentModal = ({ isOpen, onClose }) => {
+interface CreateContentProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export const CreateContentModal = ({ isOpen, onClose }: CreateContentProps) => {
   return (
     <>
       {isOpen && (

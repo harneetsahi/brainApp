@@ -13,7 +13,7 @@ const ButtonSpanStyle =
 export const Card = ({ title, type, link }: CardProps) => {
   return (
     <>
-      <div className="bg-gray-100 dark:bg-zinc-800 max-w-72 p-5 shadow-sm shadow-gray-600  rounded-lg flex flex-col gap-5">
+      <div className="bg-gray-100 dark:bg-zinc-800 min-w-64 max-w-72 p-5 shadow-sm shadow-gray-600  rounded-lg flex flex-col gap-5">
         <CardHeader title={title} type={type} link={link} />
         <CardDescription title={title} type={type} link={link} />
         <CardTags />

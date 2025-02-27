@@ -1,9 +1,9 @@
 import { DocIcon } from "../icons/DocIcon";
 import { HomeIcon } from "../icons/HomeIcon";
-import { MoonIcon } from "../icons/MoonIcon";
+
 // import { MenuIcon } from "../icons/MenuIcon";
 import { SettingsIcon } from "../icons/Settings";
-import { SunIcon } from "../icons/SunIcon";
+
 import { TrashIcon } from "../icons/TrashIcon";
 import { SidebarItems } from "./SidebarItems";
 import { Theme } from "./Theme";
@@ -27,12 +27,10 @@ export const Sidebar = () => {
           <SidebarItems icon={<DocIcon size={"md"} />} text={"Document"} />
         </div>
         <div className={defaultItemContainerStyles}>
-          {/* <SidebarItems icon={<MoonIcon size={"md"} />} text={"Dark"} />
-          <SidebarItems icon={<SunIcon size={"md"} />} text={"Light"} /> */}
-
           <Theme text={"Theme"} />
 
           <SidebarItems icon={<SettingsIcon size={"md"} />} text={"Settings"} />
+
           <SidebarItems icon={<TrashIcon size={"md"} />} text={"Trash"} />
         </div>
       </aside>
