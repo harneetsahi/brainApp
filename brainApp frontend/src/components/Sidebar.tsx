@@ -1,7 +1,9 @@
 import { DocIcon } from "../icons/DocIcon";
 import { HomeIcon } from "../icons/HomeIcon";
+import { MoonIcon } from "../icons/MoonIcon";
 // import { MenuIcon } from "../icons/MenuIcon";
 import { SettingsIcon } from "../icons/Settings";
+import { SunIcon } from "../icons/SunIcon";
 import { TrashIcon } from "../icons/TrashIcon";
 import { SidebarItems } from "./SidebarItems";
 
@@ -17,13 +19,15 @@ export const Sidebar = () => {
       </button> */}
       <aside
         // id="default-sidebar"
-        className="min-h-screen fixed w-50 py-5 px-2 bg-white dark:bg-zinc-800 flex flex-col justify-between"
+        className="min-h-screen fixed w-50 py-2 px-2 bg-white dark:bg-zinc-800 flex flex-col justify-between"
       >
         <div className={defaultItemContainerStyles}>
           <SidebarItems icon={<HomeIcon size={"md"} />} text={"Home"} />
           <SidebarItems icon={<DocIcon size={"md"} />} text={"Document"} />
         </div>
         <div className={defaultItemContainerStyles}>
+          <SidebarItems icon={<MoonIcon size={"md"} />} text={"Dark"} />
+          <SidebarItems icon={<SunIcon size={"md"} />} text={"Light"} />
           <SidebarItems icon={<SettingsIcon size={"md"} />} text={"Settings"} />
           <SidebarItems icon={<TrashIcon size={"md"} />} text={"Trash"} />
         </div>

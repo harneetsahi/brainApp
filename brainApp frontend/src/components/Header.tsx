@@ -5,8 +5,8 @@ import { ShareIcon } from "../icons/ShareIcon";
 export const Header = () => {
   return (
     <>
-      <header className="flex justify-between items-center p-5">
-        <h1 className="font-sans font-bold text-xl text-gray-800">All Notes</h1>
+      <header className="flex justify-between items-center py-10">
+        <h1 className="font-sans font-bold text-xl">All Notes</h1>
 
         <div className="flex gap-2.5">
           <Button
