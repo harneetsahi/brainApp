@@ -19,7 +19,7 @@ export const Sidebar = () => {
       </button> */}
       <aside
         // id="default-sidebar"
-        className="min-h-screen fixed w-50 py-2 px-2 bg-white dark:bg-zinc-800 flex flex-col justify-between"
+        className="min-h-screen border-r border-zinc-600 fixed w-50 py-2 px-2 bg-white dark:bg-zinc-800 flex flex-col justify-between"
       >
         <div className={defaultItemContainerStyles}>
           <SidebarItems icon={<HomeIcon size={"md"} />} text={"Home"} />

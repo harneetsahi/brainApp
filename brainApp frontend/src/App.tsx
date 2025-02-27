@@ -5,11 +5,11 @@ import { Sidebar } from "./components/Sidebar";
 function App() {
   return (
     <>
-      <div className="flex h-screen">
+      <div className="flex">
         <div className="">
           <Sidebar />
         </div>
-        <main className="ml-50 px-10 flex-1 bg-white dark:bg-zinc-900  text-gray-800 dark:text-gray-300">
+        <main className="ml-50 px-5 flex-1 bg-white dark:bg-zinc-900  text-gray-800 dark:text-gray-300">
           <Header />
           <HomeSection />
         </main>

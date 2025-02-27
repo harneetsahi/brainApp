@@ -3,7 +3,7 @@ import { TrashIcon } from "../icons/TrashIcon";
 
 interface CardProps {
   title: string;
-  type: "twitter" | "youtube" | "document";
+  type: "twitter" | "youtube" | "other";
   link: string;
 }
 

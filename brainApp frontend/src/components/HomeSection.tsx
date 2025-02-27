@@ -3,7 +3,7 @@ import { Card } from "./Card";
 export const HomeSection = () => {
   return (
     <>
-      <div className=" flex flex-wrap gap-7">
+      <div className="flex flex-wrap gap-7">
         <Card
           title={"lofi girl"}
           type={"youtube"}
