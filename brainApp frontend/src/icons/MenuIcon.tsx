@@ -1,10 +1,8 @@
-import { IconProps, iconSizeVariants } from ".";
-
-export const MenuIcon = ({ size }: IconProps) => {
+export const MenuIcon = ({ size = "size-4" }: { size?: string }) => {
   return (
     <>
       <svg
-        className={iconSizeVariants[size]}
+        className={size}
         aria-hidden="true"
         fill="currentColor"
         viewBox="0 0 20 20"

@@ -1,6 +1,4 @@
-import { IconProps, iconSizeVariants } from ".";
-
-export const HomeIcon = ({ size }: IconProps) => {
+export const HomeIcon = ({ size = "size-4" }: { size?: string }) => {
   return (
     <>
       <svg
@@ -9,7 +7,7 @@ export const HomeIcon = ({ size }: IconProps) => {
         viewBox="0 0 24 24"
         strokeWidth={2}
         stroke="currentColor"
-        className={iconSizeVariants[size]}
+        className={size}
       >
         <path
           strokeLinecap="round"
