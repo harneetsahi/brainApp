@@ -8,6 +8,8 @@ export const ShareIcon = ({ size = "size-4" }: { size?: string }) => {
         strokeWidth={1.5}
         stroke="currentColor"
         className={size}
+        aria-hidden="true"
+        role="graphics-symbol"
       >
         <path
           strokeLinecap="round"

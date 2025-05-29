@@ -2,12 +2,13 @@ export const HomeIcon = ({ size = "size-4" }: { size?: string }) => {
   return (
     <>
       <svg
-        xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
         strokeWidth={2}
         stroke="currentColor"
         className={size}
+        aria-hidden="true"
+        role="graphics-symbol"
       >
         <path
           strokeLinecap="round"

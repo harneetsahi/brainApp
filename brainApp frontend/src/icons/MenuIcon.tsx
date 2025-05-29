@@ -3,10 +3,10 @@ export const MenuIcon = ({ size = "size-4" }: { size?: string }) => {
     <>
       <svg
         className={size}
-        aria-hidden="true"
         fill="currentColor"
         viewBox="0 0 20 20"
-        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+        role="graphics-symbol"
       >
         <path
           clip-rule="evenodd"
