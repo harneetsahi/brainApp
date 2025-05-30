@@ -1,27 +1,38 @@
-import jwt from "jsonwebtoken";
+import { NextFunction, Request, Response } from "express";
+import jwt, { JwtPayload } from "jsonwebtoken";
+import { User } from "../schema/user.schema";
 
-function userAuth(req: any, res: any, next: any) {
-  const authorization = req.headers.authorization;
-  const splitAuth = authorization.split(" ");
-  const token = splitAuth[1];
+async function userAuth(req: Request, res: Response, next: NextFunction) {
+  const token = req.cookies.jwt;
 
   if (!token) {
-    return res.json({
-      message: "unauthorized access",
+    res.status(401).json({
+      message: "Please log in",
     });
+    return;
   }
 
   try {
-    const decodedInfo: any = jwt.verify(
+    const decodedInfo = jwt.verify(
       token,
       `${process.env.JWT_USER_SECRET}`
-    );
+    ) as JwtPayload;
 
-    req.userId = decodedInfo.id;
+    if (!decodedInfo) {
+      res
+        .status(400)
+        .json({ message: "Unauthorized - invalid or expired session" });
+      return;
+    }
+
+    const user = await User.findById(decodedInfo.id).select("-password");
+
+    // @ts-ignore
+    req.user = user;
     next();
   } catch (error) {
-    res.status(403).json({
-      message: "Invalid or expired session",
+    res.status(500).json({
+      message: "Invalid server error",
     });
   }
 }
