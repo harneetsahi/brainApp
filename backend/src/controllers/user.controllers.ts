@@ -1,12 +1,13 @@
-import jwt from "jsonwebtoken";
+import { Request, Response } from "express";
 import { z } from "zod";
+import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import random from "../utils";
 import { User } from "../schema/user.schema";
 import { Content } from "../schema/content.schema";
 import { Link } from "../schema/link.schema";
-import random from "../utils";
 
-async function userSignup(req: any, res: any) {
+async function signup(req: Request, res: Response) {
   const requiredBody = z.object({
     firstName: z.string().min(1).max(50),
     lastName: z.string().min(1).max(50),
@@ -28,10 +29,11 @@ async function userSignup(req: any, res: any) {
   const parsedData = requiredBody.safeParse(req.body);
 
   if (!parsedData.success) {
-    return res.json({
+    res.status(400).json({
       message: "Incorrect format",
       error: parsedData.error,
     });
+    return;
   }
 
   const { firstName, lastName, email, password } = req.body;
@@ -39,19 +41,27 @@ async function userSignup(req: any, res: any) {
   try {
     const hashedPassword = await bcrypt.hash(password, 8);
 
-    await User.create({ firstName, lastName, email, password: hashedPassword });
+    const checkExistingUser = await User.findOne({ email });
 
-    res.json({ message: "You are successfully signed up" });
+    if (checkExistingUser) {
+      res.status(409).json({ message: "User already exists" });
+      return;
+    }
+
+    const user = await User.create({
+      firstName,
+      lastName,
+      email,
+      password: hashedPassword,
+    });
+
+    res.status(201).json({ message: "You are successfully signed up" });
   } catch (error) {
-    res.status(411).json({ message: "User already exists" });
+    res.status(500).json({ message: "Internal server error" });
   }
-
-  res.status(200).json({ message: "Signed up" });
 }
 
-//
-
-async function userLogin(req: any, res: any) {
+async function login(req: Request, res: Response) {
   const { email, password } = req.body;
 
   try {
@@ -63,38 +73,91 @@ async function userLogin(req: any, res: any) {
       if (matchPassword) {
         const token = jwt.sign(
           { id: user._id },
-          `${process.env.JWT_USER_SECRET}`
+          `${process.env.JWT_USER_SECRET}`,
+          { expiresIn: "7d" }
         );
 
-        return res.status(200).json({
+        const options = {
+          maxAge: 7 * 24 * 60 * 60 * 1000,
+          httpOnly: true,
+          secure: process.env.NODE_ENV !== "development",
+        };
+
+        res.status(201).cookie("jwt", token, options).json({
           message: "Logged in",
-          token: token,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          _id: user._id,
         });
       } else {
-        return res.status(403).json({ message: "Incorrect credentials" });
+        res.status(403).json({ message: "Incorrect credentials" });
+        return;
       }
-    } else return res.json({ message: "User does not exist" });
+    } else {
+      res.status(403).json({ message: "User does not exist" });
+      return;
+    }
   } catch (error) {
-    res.json({ message: "Internal server error" });
+    res.status(500).json({ message: "Internal server error" });
   }
 }
 
-//
+async function signout(req: Request, res: Response) {
+  try {
+    res
+      .clearCookie("jwt", {
+        maxAge: 0,
+        httpOnly: true,
+        secure: process.env.NODE_ENV !== "development",
+      })
+      .status(201)
+      .json({
+        message: "logged out successfully",
+      });
+  } catch (error) {
+    res.status(500).json({
+      message: "Internal server error",
+    });
+  }
+}
 
-async function postContent(req: any, res: any) {
-  const { title, link } = req.body;
+async function checkAuth(req: Request, res: Response) {
+  try {
+    //@ts-ignore
+    res.status(201).json(req.user);
+  } catch (error) {
+    res.status(500).json({
+      message: "Internal server error",
+    });
+  }
+}
+
+///////
+
+async function postContent(req: Request, res: Response) {
+  const { title, type, link, description } = req.body;
+
+  if (!title || !type || !link) {
+    res.status(400).json({
+      message: "title, type, link fields must be filled out",
+    });
+    return;
+  }
 
   try {
     const content = await Content.create({
       title,
+      type,
       link,
-      userId: req.userId,
-      tags: [],
+      description,
+      // @ts-ignore
+      userId: req.user._id,
     });
 
-    res.json({
+    res.status(201).json({
       message: "Content posted",
-      contentId: content._id,
+      content: content,
     });
   } catch (error) {
     res.status(500).json({
@@ -105,8 +168,9 @@ async function postContent(req: any, res: any) {
 
 //
 
-async function getContent(req: any, res: any) {
-  const userId = req.userId;
+async function getContent(req: Request, res: Response) {
+  // @ts-ignore
+  const userId = req.user._id;
 
   try {
     const contents = await Content.find({ userId }).populate(
@@ -114,10 +178,11 @@ async function getContent(req: any, res: any) {
       "firstName"
     );
 
-    return res.json({
+    res.status(201).json({
       message: "All your posts",
       content: contents,
     });
+    return;
   } catch (error) {
     res.status(500).json({
       message: "Error fetching yours posts",
@@ -127,8 +192,9 @@ async function getContent(req: any, res: any) {
 
 //
 
-async function deleteContent(req: any, res: any) {
-  const userId = req.userId;
+async function deleteContent(req: Request, res: Response) {
+  // @ts-ignore
+  const userId = req.user._id;
   const { contentId } = req.body;
 
   try {
@@ -138,12 +204,13 @@ async function deleteContent(req: any, res: any) {
     });
 
     if (content.deletedCount === 0) {
-      return res.json({
+      res.status(401).json({
         message: "Could not delete content",
       });
+      return;
     }
 
-    res.json({
+    res.status(201).json({
       message: "Content deleted",
       deletedContentId: contentId,
     });
@@ -154,8 +221,9 @@ async function deleteContent(req: any, res: any) {
 
 //
 
-async function shareContent(req: any, res: any) {
-  const userId = req.userId;
+async function shareContent(req: Request, res: Response) {
+  // @ts-ignore
+  const userId = req.user._id;
   const { share } = req.body;
 
   try {
@@ -163,26 +231,28 @@ async function shareContent(req: any, res: any) {
       const linkAlreadyExists = await Link.findOne({ userId });
 
       if (linkAlreadyExists) {
-        return res.json({
+        res.status(202).json({
           message: "Link already exists",
-          hash: "/share/" + linkAlreadyExists.hash,
+          hash: "/" + linkAlreadyExists.hash,
         });
+        return;
       }
 
       const hash = random(10);
 
-      await Link.create({ hash: hash, userId });
+      await Link.create({ hash, userId });
 
-      res.json({
-        message: "Shareable link updated",
-        link: "/share/" + hash,
+      res.status(201).json({
+        message: "Shareable link created",
+        link: "/" + hash,
       });
     } else {
       await Link.deleteOne({ userId });
 
-      res.json({
+      res.status(201).json({
         message: "Removed link",
       });
+      return;
     }
   } catch (error) {
     res.json({
@@ -193,43 +263,50 @@ async function shareContent(req: any, res: any) {
 
 //
 
-async function getSharedContent(req: any, res: any) {
+async function getSharedContent(req: Request, res: Response) {
   const { shareLink } = req.params;
 
   try {
     const link = await Link.findOne({ hash: shareLink });
 
     if (!link) {
-      res.status(411).json({
+      res.status(404).json({
         message: "Content not found",
       });
       return;
     }
 
-    //
     const content = await Content.find({ userId: link.userId });
 
     const user = await User.findOne({ _id: link.userId });
 
+    if (!content) {
+      res.status(404).json({ message: "No content available" });
+      return;
+    }
+
     if (!user) {
-      res.status(411).json({ message: "user not found" });
+      res.status(404).json({ message: "User not found" });
       return;
     }
 
     res.json({
-      user: user.firstName,
+      firstName: user.firstName,
+      lastName: user.lastName,
       content: content,
     });
   } catch (error) {
-    res.json({
+    res.status(500).json({
       message: "Unable to fetch content due to server error",
     });
   }
 }
 
 export {
-  userSignup,
-  userLogin,
+  signup,
+  login,
+  signout,
+  checkAuth,
   postContent,
   getContent,
   deleteContent,
