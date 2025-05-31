@@ -5,12 +5,14 @@ const contentSchema = new Schema({
     type: String,
     required: true,
   },
+  type: {
+    type: String,
+  },
   link: {
     type: String,
   },
-  tags: {
-    type: [Schema.Types.ObjectId],
-    ref: "Tag",
+  description: {
+    type: String,
   },
   userId: {
     type: Schema.Types.ObjectId,
