@@ -55,7 +55,23 @@ async function signup(req: Request, res: Response) {
       password: hashedPassword,
     });
 
-    res.status(201).json({ message: "You are successfully signed up" });
+    const token = jwt.sign({ id: user._id }, `${process.env.JWT_USER_SECRET}`, {
+      expiresIn: "7d",
+    });
+
+    const options = {
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+      httpOnly: true,
+      secure: process.env.NODE_ENV !== "development",
+    };
+
+    res.status(201).cookie("jwt", token, options).json({
+      message: "You are successfully signed up",
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      _id: user._id,
+    });
   } catch (error) {
     res.status(500).json({ message: "Internal server error" });
   }
@@ -125,7 +141,7 @@ async function signout(req: Request, res: Response) {
 async function checkAuth(req: Request, res: Response) {
   try {
     //@ts-ignore
-    res.status(201).json(req.user);
+    res.status(201).json(req.user._id);
   } catch (error) {
     res.status(500).json({
       message: "Internal server error",
@@ -134,6 +150,30 @@ async function checkAuth(req: Request, res: Response) {
 }
 
 ///////
+
+//
+
+async function getContent(req: Request, res: Response) {
+  // @ts-ignore
+  const userId = req.user._id;
+
+  try {
+    const contents = await Content.find({ userId }).populate(
+      "userId",
+      "firstName"
+    );
+
+    res.status(201).json({
+      message: "All your posts",
+      content: contents,
+    });
+    return;
+  } catch (error) {
+    res.status(500).json({
+      message: "Error fetching yours posts",
+    });
+  }
+}
 
 async function postContent(req: Request, res: Response) {
   const { title, type, link, description } = req.body;
@@ -168,34 +208,10 @@ async function postContent(req: Request, res: Response) {
 
 //
 
-async function getContent(req: Request, res: Response) {
-  // @ts-ignore
-  const userId = req.user._id;
-
-  try {
-    const contents = await Content.find({ userId }).populate(
-      "userId",
-      "firstName"
-    );
-
-    res.status(201).json({
-      message: "All your posts",
-      content: contents,
-    });
-    return;
-  } catch (error) {
-    res.status(500).json({
-      message: "Error fetching yours posts",
-    });
-  }
-}
-
-//
-
 async function deleteContent(req: Request, res: Response) {
   // @ts-ignore
   const userId = req.user._id;
-  const { contentId } = req.body;
+  const { contentId } = req.params;
 
   try {
     const content = await Content.deleteOne({
@@ -215,45 +231,35 @@ async function deleteContent(req: Request, res: Response) {
       deletedContentId: contentId,
     });
   } catch (error) {
-    res.status(500).json({ message: "Error deleting the course" });
+    res.status(500).json({ message: "Internal server error" });
   }
 }
 
 //
 
-async function shareContent(req: Request, res: Response) {
+async function shareBrain(req: Request, res: Response) {
   // @ts-ignore
   const userId = req.user._id;
-  const { share } = req.body;
 
   try {
-    if (share) {
-      const linkAlreadyExists = await Link.findOne({ userId });
+    const linkAlreadyExists = await Link.findOne({ userId });
 
-      if (linkAlreadyExists) {
-        res.status(202).json({
-          message: "Link already exists",
-          hash: "/" + linkAlreadyExists.hash,
-        });
-        return;
-      }
-
-      const hash = random(10);
-
-      await Link.create({ hash, userId });
-
-      res.status(201).json({
-        message: "Shareable link created",
-        link: "/" + hash,
-      });
-    } else {
-      await Link.deleteOne({ userId });
-
-      res.status(201).json({
-        message: "Removed link",
+    if (linkAlreadyExists) {
+      res.status(202).json({
+        message: "Link already exists",
+        link: linkAlreadyExists.hash,
       });
       return;
     }
+
+    const hash = random(10);
+
+    await Link.create({ hash, userId });
+
+    res.status(201).json({
+      message: "Shareable link created",
+      link: hash,
+    });
   } catch (error) {
     res.json({
       message: "Unable to share content",
@@ -263,8 +269,27 @@ async function shareContent(req: Request, res: Response) {
 
 //
 
-async function getSharedContent(req: Request, res: Response) {
+async function stopSharingBrain(req: Request, res: Response) {
+  // @ts-ignore
+  const userId = req.user._id;
+
+  try {
+    await Link.deleteOne({ userId });
+
+    res.status(201).json({
+      message: "Removed shared link",
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+//
+
+async function getSharedBrain(req: Request, res: Response) {
   const { shareLink } = req.params;
+
+  console.log(req.params);
 
   try {
     const link = await Link.findOne({ hash: shareLink });
@@ -310,6 +335,7 @@ export {
   postContent,
   getContent,
   deleteContent,
-  shareContent,
-  getSharedContent,
+  shareBrain,
+  stopSharingBrain,
+  getSharedBrain,
 };
