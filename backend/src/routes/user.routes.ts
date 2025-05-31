@@ -1,31 +1,41 @@
 import { Router } from "express";
 import userAuth from "../middlewares/user.auth";
 import {
-  userSignup,
-  userLogin,
+  signup,
+  login,
+  signout,
+  checkAuth,
   postContent,
   getContent,
   deleteContent,
-  shareContent,
-  getSharedContent,
+  shareBrain,
+  stopSharingBrain,
+  getSharedBrain,
 } from "../controllers/user.controllers";
 
 const userRouter = Router();
 
-userRouter.route("/signup").post(userSignup);
+userRouter.route("/signup").post(signup);
 
-userRouter.route("/login").post(userLogin);
+userRouter.route("/login").post(login);
+
+userRouter.route("/signout").post(signout);
+
+// open endpoint so anyone can access if shareable
+userRouter.route("/brain/share/:shareLink").get(getSharedBrain);
 
 userRouter.use(userAuth);
 
-userRouter.route("/content").post(postContent);
+userRouter.route("/checkAuth").get(checkAuth);
 
 userRouter.route("/content").get(getContent);
 
-userRouter.route("/content").delete(deleteContent);
+userRouter.route("/content").post(postContent);
 
-userRouter.route("/brain/share").post(shareContent);
+userRouter.route("/content/:contentId").delete(deleteContent);
 
-userRouter.route("/brain/:shareLink").get(getSharedContent);
+userRouter.route("/brain/share").post(shareBrain);
+
+userRouter.route("/brain/share").delete(stopSharingBrain);
 
 export default userRouter;
