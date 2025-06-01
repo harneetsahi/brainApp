@@ -176,11 +176,11 @@ async function getContent(req: Request, res: Response) {
 }
 
 async function postContent(req: Request, res: Response) {
-  const { title, type, link, description } = req.body;
+  const { title, link, description } = req.body;
 
-  if (!title || !type || !link) {
+  if (!description && !title) {
     res.status(400).json({
-      message: "title, type, link fields must be filled out",
+      message: "Title or notes field must be filled out",
     });
     return;
   }
@@ -188,7 +188,6 @@ async function postContent(req: Request, res: Response) {
   try {
     const content = await Content.create({
       title,
-      type,
       link,
       description,
       // @ts-ignore
@@ -288,8 +287,6 @@ async function stopSharingBrain(req: Request, res: Response) {
 
 async function getSharedBrain(req: Request, res: Response) {
   const { shareLink } = req.params;
-
-  console.log(req.params);
 
   try {
     const link = await Link.findOne({ hash: shareLink });
