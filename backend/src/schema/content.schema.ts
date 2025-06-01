@@ -3,10 +3,6 @@ import mongoose, { Schema } from "mongoose";
 const contentSchema = new Schema({
   title: {
     type: String,
-    required: true,
-  },
-  type: {
-    type: String,
   },
   link: {
     type: String,
