@@ -11,6 +11,7 @@ import {
   shareBrain,
   stopSharingBrain,
   getSharedBrain,
+  updatePassword,
 } from "../controllers/user.controllers";
 
 const userRouter = Router();
@@ -27,6 +28,8 @@ userRouter.route("/brain/share/:shareLink").get(getSharedBrain);
 userRouter.use(userAuth);
 
 userRouter.route("/checkAuth").get(checkAuth);
+
+userRouter.route("/updatePassword").post(updatePassword);
 
 userRouter.route("/content").get(getContent);
 
