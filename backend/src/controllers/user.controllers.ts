@@ -149,6 +149,55 @@ async function checkAuth(req: Request, res: Response) {
   }
 }
 
+async function updatePassword(req: Request, res: Response) {
+  console.log(req.body);
+  // @ts-ignore
+  const userId = req.user._id;
+  const { oldPassword, newPassword, confirmNewPassword } = req.body;
+
+  if (newPassword !== confirmNewPassword) {
+    res.status(401).json({
+      message: "New passwords must match",
+    });
+    return;
+  }
+
+  if (oldPassword === newPassword) {
+    res.status(400).json({
+      message: "New password cannot be the same as old password",
+    });
+    return;
+  }
+
+  try {
+    const user = await User.findOne(userId);
+
+    if (!user) {
+      res.status(404).json({ message: "User not found" });
+      return;
+    }
+
+    const matchPassword = await bcrypt.compare(oldPassword, user?.password);
+
+    if (!matchPassword) {
+      res.status(406).json({ message: "Incorrect credentials" });
+      return;
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 8);
+
+    user.password = hashedPassword;
+
+    await user.save({ validateBeforeSave: false });
+
+    res.status(200).json({ message: "Password successfully updated" });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error fetching yours posts",
+    });
+  }
+}
+
 ///////
 
 //
@@ -329,6 +378,7 @@ export {
   login,
   signout,
   checkAuth,
+  updatePassword,
   postContent,
   getContent,
   deleteContent,
