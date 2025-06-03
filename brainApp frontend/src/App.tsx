@@ -4,30 +4,33 @@ import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 
-import SharedBrain from "./pages/SharedBrain";
 import { useCheckAuth } from "./hooks/useAuthQueries";
 import { LoaderIcon } from "./icons/LoaderIcon";
+import { UpdatePassword } from "./pages/UpdatePassword";
+import { Settings } from "./pages/Settings";
+import Home from "./pages/Home";
+import SharedNotes from "./pages/SharedNotes";
 
 function App() {
-  const { data: authUser, isPending, isSuccess } = useCheckAuth();
+  const { isPending, isSuccess } = useCheckAuth();
 
   if (isPending) {
     return (
-      <div className="flex justify-center items-center mt-50">
-        {/* <LoaderIcon /> */}
+      <div className="flex justify-center items-center bg-zinc-100/50 dark:bg-zinc-900  text-gray-800 dark:text-gray-300 min-h-screen">
+        <LoaderIcon />
       </div>
     );
   }
 
   return (
-    <div className="bg-zinc-100/50 dark:bg-zinc-900  text-gray-800 dark:text-gray-300">
+    <div className="bg-zinc-100/50 dark:bg-zinc-900  text-gray-800 dark:text-gray-300 min-h-screen">
       <BrowserRouter>
         <Toaster position="bottom-right" />
         <Routes>
-          <Route path="/brain/share/:hash" element={<SharedBrain />}></Route>
+          <Route path="/notes/share/:hash" element={<SharedNotes />}></Route>
           <Route
             path="/"
-            element={isSuccess ? <Dashboard /> : <Navigate to="/login" />}
+            element={!isSuccess ? <Home /> : <Navigate to="/dashboard" />}
           ></Route>
           <Route
             path="/dashboard"
@@ -40,6 +43,14 @@ function App() {
           <Route
             path="/signup"
             element={!isSuccess ? <Signup /> : <Navigate to="/dashboard" />}
+          ></Route>
+          <Route
+            path="/settings/updatePassword"
+            element={isSuccess ? <UpdatePassword /> : <Navigate to="/login" />}
+          ></Route>
+          <Route
+            path="/settings"
+            element={isSuccess ? <Settings /> : <Navigate to="/login" />}
           ></Route>
         </Routes>
       </BrowserRouter>
