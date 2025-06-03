@@ -1,4 +1,4 @@
-export const HomeIcon = ({ size = "size-4" }: { size?: string }) => {
+export const HomeIcon = ({ size = "size-5" }: { size?: string }) => {
   return (
     <>
       <svg
