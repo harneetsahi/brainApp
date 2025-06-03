@@ -1,39 +1,55 @@
-import { DocIcon } from "../icons/DocIcon";
-import { HomeIcon } from "../icons/HomeIcon";
+import { Link } from "react-router-dom";
+import { SettingsIcon } from "../icons/SettingsIcon";
 
-// import { MenuIcon } from "../icons/MenuIcon";
-import { SettingsIcon } from "../icons/Settings";
-
-import { TrashIcon } from "../icons/TrashIcon";
-import { SidebarItems } from "./SidebarItems";
 import { Theme } from "./Theme";
+import { LogoutIcon } from "../icons/LogoutIcon";
+import { useCheckAuth, useSignout } from "../hooks/useAuthQueries";
+import { NotesIcon } from "../icons/NotesIcon";
 
-const defaultItemContainerStyles = "flex flex-col cursor-pointer";
+const listStyles =
+  "hover:bg-zinc-100 dark:hover:bg-zinc-700 text-gray-800 dark:text-gray-300 cursor-pointer font-sans rounded-lg flex gap-3 items-center p-2";
 
-// const darkModeStyles =
+const listPStyles = "text-[15px] hidden sm:inline ";
 
 export const Sidebar = () => {
+  const { data: authUser } = useCheckAuth();
+  const { mutate: signout } = useSignout();
+
+  function handleSignout() {
+    signout();
+  }
+
   return (
-    <>
-      {/* <button className="hover:bg-gray-400 dark:hover:bg-gray-200 rounded-lg cursor-pointer p-2 h-10 text-gray-800 dark:text-gray-600">
-        <MenuIcon size={"lg"} />
-      </button> */}
-      <aside
-        // id="default-sidebar"
-        className="min-h-screen border-r border-zinc-600 fixed w-50 py-2 px-2 bg-white dark:bg-zinc-800 flex flex-col justify-between"
-      >
-        <div className={defaultItemContainerStyles}>
-          <SidebarItems icon={<HomeIcon size={"md"} />} text={"Home"} />
-          <SidebarItems icon={<DocIcon size={"md"} />} text={"Document"} />
-        </div>
-        <div className={defaultItemContainerStyles}>
-          <Theme text={"Theme"} />
+    <aside className="h-screen fixed border-r dark:border-zinc-700 border-zinc-200 sm:w-50 py-5 px-2 bg-white dark:bg-zinc-800 flex flex-col justify-between">
+      <div>
+        <Link to="/" className={listStyles}>
+          <NotesIcon className="size-6" />
+          <p className={listPStyles}>{authUser.firstName}'s notes</p>
+        </Link>
+      </div>
 
-          <SidebarItems icon={<SettingsIcon size={"md"} />} text={"Settings"} />
+      <ul className="flex flex-col gap-2">
+        <li>
+          <Theme text={"Theme"} className="gap-3" />
+        </li>
+        <li>
+          <Link to="/settings" className={listStyles}>
+            <SettingsIcon />
+            <p className={listPStyles}>Settings</p>
+          </Link>
+        </li>
 
-          <SidebarItems icon={<TrashIcon size={"md"} />} text={"Trash"} />
-        </div>
-      </aside>
-    </>
+        <li>
+          <Link
+            to="/login"
+            className={`${listStyles} `}
+            onClick={handleSignout}
+          >
+            <LogoutIcon />
+            <p className={listPStyles}>Logout</p>
+          </Link>
+        </li>
+      </ul>
+    </aside>
   );
 };

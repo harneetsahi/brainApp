@@ -2,7 +2,15 @@ import { useEffect, useState } from "react";
 import { SunIcon } from "../icons/SunIcon";
 import { MoonIcon } from "../icons/MoonIcon";
 
-export const Theme = ({ text }: { text: string }) => {
+export const Theme = ({
+  text,
+  className,
+  size,
+}: {
+  text?: string;
+  className?: string;
+  size?: string;
+}) => {
   const [darkMode, setDarkMode] = useState(() => {
     const savedTheme = localStorage.getItem("theme");
     return savedTheme === "dark";
@@ -24,10 +32,10 @@ export const Theme = ({ text }: { text: string }) => {
     <>
       <button
         onClick={() => setDarkMode(!darkMode)}
-        className="cursor-pointer flex gap-3 items-center font-sans text-sm p-2 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-700 text-gray-800 dark:text-gray-300 "
+        className={`cursor-pointer flex  items-center font-sans  p-2 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-700 text-gray-800 dark:text-gray-300 w-full ${className} `}
       >
-        {darkMode ? <SunIcon size="size-4" /> : <MoonIcon size="size-4" />}
-        <p className="hidden sm:inline">{text}</p>
+        {darkMode ? <SunIcon size={size} /> : <MoonIcon size={size} />}
+        <p className="hidden sm:inline text-[15px]">{text}</p>
       </button>
     </>
   );
