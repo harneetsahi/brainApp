@@ -1,39 +1,47 @@
 import { Button } from "./Button";
-import { PlusIcon } from "../icons/PlusIcon";
 import { ShareIcon } from "../icons/ShareIcon";
-import { CreateContentModal } from "./CreateContentModal";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { ShareContentModal } from "./ShareContentModal";
+import { useOutsideClick } from "../hooks/useOutsideClick";
 
 export const Header = () => {
-  const [modalOpen, setModalOpen] = useState(false);
+  const [shareModalOpen, setShareModalOpen] = useState(false);
+  const shareBtnRef = useRef(null);
+
+  function handleClickOutside() {
+    setShareModalOpen(false);
+  }
+
+  useOutsideClick(shareBtnRef, handleClickOutside);
+
+  function handleShareModal() {
+    setShareModalOpen((prev) => !prev);
+  }
 
   return (
     <>
-      <header className="flex justify-between items-center py-10">
-        <CreateContentModal
-          isOpen={modalOpen}
-          onClose={() => {
-            setModalOpen(false);
-          }}
-        />
+      <header className="flex justify-center  pt-6 pb-12  relative">
+        <h1 className=" text-2xl " style={{ fontFamily: "Italiana" }}>
+          KeepNote
+        </h1>
 
-        <h1 className="font-sans font-bold text-xl">All Notes</h1>
-
-        <div className="flex gap-2.5">
+        <div ref={shareBtnRef} className="absolute right-0" title="Share notes">
           <Button
-            variant={"secondary"}
-            text={"Share Brain"}
+            variant={"iconBtn"}
+            text={"Share Notes"}
             size={"sm"}
-            startIcon={<ShareIcon size={"md"} />}
-          />
-          <Button
-            variant={"primary"}
-            text={"Add Content"}
-            size={"sm"}
-            startIcon={<PlusIcon size={"md"} />}
-            onClick={() => setModalOpen(true)}
+            startIcon={<ShareIcon size="size-4" />}
+            className="flex gap-2 items-center h-9"
+            onClick={handleShareModal}
           />
         </div>
+
+        <ShareContentModal
+          isOpen={shareModalOpen}
+          onClose={() => {
+            setShareModalOpen(false);
+          }}
+        />
       </header>
     </>
   );
