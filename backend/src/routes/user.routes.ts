@@ -8,9 +8,9 @@ import {
   postContent,
   getContent,
   deleteContent,
-  shareBrain,
-  stopSharingBrain,
-  getSharedBrain,
+  shareNotes,
+  stopSharingNotes,
+  getSharedNotes,
   updatePassword,
 } from "../controllers/user.controllers";
 
@@ -22,14 +22,13 @@ userRouter.route("/login").post(login);
 
 userRouter.route("/signout").post(signout);
 
-// open endpoint so anyone can access if shareable
-userRouter.route("/brain/share/:shareLink").get(getSharedBrain);
+userRouter.route("/notes/share/:shareLink").get(getSharedNotes);
 
 userRouter.use(userAuth);
 
 userRouter.route("/checkAuth").get(checkAuth);
 
-userRouter.route("/updatePassword").post(updatePassword);
+userRouter.route("/settings/updatePassword").post(updatePassword);
 
 userRouter.route("/content").get(getContent);
 
@@ -37,8 +36,8 @@ userRouter.route("/content").post(postContent);
 
 userRouter.route("/content/:contentId").delete(deleteContent);
 
-userRouter.route("/brain/share").post(shareBrain);
+userRouter.route("/notes/share").post(shareNotes);
 
-userRouter.route("/brain/share").delete(stopSharingBrain);
+userRouter.route("/notes/share").delete(stopSharingNotes);
 
 export default userRouter;
