@@ -25,9 +25,14 @@ async function userAuth(req: Request, res: Response, next: NextFunction) {
       return;
     }
 
-    const user = await User.findById(decodedInfo.id).select("-password");
+    const user = await User.findById(decodedInfo.id).select([
+      "-password",
+      "-createdAt",
+      "-updatedAt",
+      "--v",
+    ]);
 
-    // @ts-ignore
+    //@ts-ignore
     req.user = user;
     next();
   } catch (error) {

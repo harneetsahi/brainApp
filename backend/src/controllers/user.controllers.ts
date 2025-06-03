@@ -140,8 +140,7 @@ async function signout(req: Request, res: Response) {
 
 async function checkAuth(req: Request, res: Response) {
   try {
-    //@ts-ignore
-    res.status(201).json(req.user._id);
+    res.status(201).json(req.user);
   } catch (error) {
     res.status(500).json({
       message: "Internal server error",
@@ -150,9 +149,7 @@ async function checkAuth(req: Request, res: Response) {
 }
 
 async function updatePassword(req: Request, res: Response) {
-  console.log(req.body);
-  // @ts-ignore
-  const userId = req.user._id;
+  const userId = req.user?._id;
   const { oldPassword, newPassword, confirmNewPassword } = req.body;
 
   if (newPassword !== confirmNewPassword) {
@@ -170,7 +167,7 @@ async function updatePassword(req: Request, res: Response) {
   }
 
   try {
-    const user = await User.findOne(userId);
+    const user = await User.findOne({ _id: userId });
 
     if (!user) {
       res.status(404).json({ message: "User not found" });
@@ -198,13 +195,8 @@ async function updatePassword(req: Request, res: Response) {
   }
 }
 
-///////
-
-//
-
 async function getContent(req: Request, res: Response) {
-  // @ts-ignore
-  const userId = req.user._id;
+  const userId = req.user?._id;
 
   try {
     const contents = await Content.find({ userId }).populate(
@@ -239,8 +231,7 @@ async function postContent(req: Request, res: Response) {
       title,
       link,
       description,
-      // @ts-ignore
-      userId: req.user._id,
+      userId: req.user?._id,
     });
 
     res.status(201).json({
@@ -254,11 +245,8 @@ async function postContent(req: Request, res: Response) {
   }
 }
 
-//
-
 async function deleteContent(req: Request, res: Response) {
-  // @ts-ignore
-  const userId = req.user._id;
+  const userId = req.user?._id;
   const { contentId } = req.params;
 
   try {
@@ -283,11 +271,8 @@ async function deleteContent(req: Request, res: Response) {
   }
 }
 
-//
-
-async function shareBrain(req: Request, res: Response) {
-  // @ts-ignore
-  const userId = req.user._id;
+async function shareNotes(req: Request, res: Response) {
+  const userId = req.user?._id;
 
   try {
     const linkAlreadyExists = await Link.findOne({ userId });
@@ -315,11 +300,8 @@ async function shareBrain(req: Request, res: Response) {
   }
 }
 
-//
-
-async function stopSharingBrain(req: Request, res: Response) {
-  // @ts-ignore
-  const userId = req.user._id;
+async function stopSharingNotes(req: Request, res: Response) {
+  const userId = req.user?._id;
 
   try {
     await Link.deleteOne({ userId });
@@ -332,9 +314,7 @@ async function stopSharingBrain(req: Request, res: Response) {
   }
 }
 
-//
-
-async function getSharedBrain(req: Request, res: Response) {
+async function getSharedNotes(req: Request, res: Response) {
   const { shareLink } = req.params;
 
   try {
@@ -382,7 +362,7 @@ export {
   postContent,
   getContent,
   deleteContent,
-  shareBrain,
-  stopSharingBrain,
-  getSharedBrain,
+  shareNotes,
+  stopSharingNotes,
+  getSharedNotes,
 };
