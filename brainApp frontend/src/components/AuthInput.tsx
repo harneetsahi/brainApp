@@ -1,19 +1,20 @@
 import React from "react";
+import { UseFormRegister } from "react-hook-form";
+import { IAuth } from "../store_and_types/types";
 
 interface InputProps {
   icon?: React.JSX.Element;
   placeholder: string;
   type: string;
-  name: string;
   id: string;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  value?: string;
   minLength?: number;
   maxLength?: number;
   pattern?: string;
   title?: string;
   required?: boolean;
+  name: keyof IAuth;
   className?: string;
+  register: UseFormRegister<IAuth>;
 }
 
 export function AuthInput({
@@ -22,8 +23,7 @@ export function AuthInput({
   type,
   name,
   id,
-  onChange,
-  value,
+  register,
   minLength,
   maxLength,
   pattern,
@@ -41,10 +41,8 @@ export function AuthInput({
           className="pl-8 py-2 flex-1"
           type={type}
           placeholder={placeholder}
-          name={name}
           id={id}
-          onChange={onChange}
-          value={value}
+          {...register(name)}
           minLength={minLength}
           maxLength={maxLength}
           pattern={pattern}
