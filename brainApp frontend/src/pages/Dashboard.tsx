@@ -5,15 +5,11 @@ import { Sidebar } from "../components/Sidebar";
 function Dashboard() {
   return (
     <>
-      <div className="flex h-screen">
-        <div className="">
-          <Sidebar />
-        </div>
-        <main className="ml-50 px-5 flex-1 bg-white dark:bg-zinc-900  text-gray-800 dark:text-gray-300">
-          <Header />
-          <HomeSection />
-        </main>
-      </div>
+      <Sidebar />
+      <main className="px-3 sm:px-5 flex-1 ml-14 sm:ml-50 min-h-screen  max-w-600 mx-auto  ">
+        <Header />
+        <HomeSection />
+      </main>
     </>
   );
 }
