@@ -1,6 +1,6 @@
 import React from "react";
 import { UseFormRegister } from "react-hook-form";
-import { IAuth } from "../store_and_types/types";
+import { IAuth } from "../types/types";
 
 interface InputProps {
   icon?: React.JSX.Element;
