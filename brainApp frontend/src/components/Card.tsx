@@ -1,7 +1,7 @@
 import toast from "react-hot-toast";
 import { LinkIcon } from "../icons/LinkIcon";
 import { TrashIcon } from "../icons/TrashIcon";
-import { IContent } from "../store_and_types/types";
+import { IContent } from "../types/types";
 import { useEffect, useRef, useState } from "react";
 import { PaintIcon } from "../icons/PaintIcon";
 import { CircleIcon } from "../icons/Circle";

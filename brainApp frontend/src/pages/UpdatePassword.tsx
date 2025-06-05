@@ -8,7 +8,7 @@ import { LoaderIcon } from "../icons/LoaderIcon";
 import PasswordIcon from "../icons/PasswordIcon";
 import Eye from "../icons/Eye";
 import EyeClose from "../icons/EyeClose";
-import { IAuth } from "../store_and_types/types";
+import { IAuth } from "../types/types";
 import toast from "react-hot-toast";
 
 export const UpdatePassword = () => {

@@ -1,5 +1,5 @@
 import { UseFormRegister } from "react-hook-form";
-import { IContent } from "../store_and_types/types";
+import { IContent } from "../types/types";
 
 const inputStyle =
   " w-full border-1 dark:border-zinc-700/50 border-zinc-100  dark:text-zinc-200 text-zinc-800  rounded-lg mb-3 font-light px-3 py-2 ";

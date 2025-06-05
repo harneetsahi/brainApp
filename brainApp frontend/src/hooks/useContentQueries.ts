@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { axiosInstance } from "../lib/axios";
-import { IContent } from "../store_and_types/types";
+import { IContent } from "../types/types";
 
 const fetchContents = async () => {
   const res = await axiosInstance.get("/content");

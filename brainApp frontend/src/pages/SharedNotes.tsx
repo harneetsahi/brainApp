@@ -1,7 +1,7 @@
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
 import { useGetSharedNotes } from "../hooks/useContentQueries";
-import { IContent } from "../store_and_types/types";
+import { IContent } from "../types/types";
 import { Navbar } from "../components/Navbar";
 import { LoaderIcon } from "../icons/LoaderIcon";
 import { LinkIcon } from "../icons/LinkIcon";

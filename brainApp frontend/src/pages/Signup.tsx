@@ -10,7 +10,7 @@ import PasswordIcon from "../icons/PasswordIcon";
 import Eye from "../icons/Eye";
 import EyeClose from "../icons/EyeClose";
 import { LoaderIcon } from "../icons/LoaderIcon";
-import { IAuth } from "../store_and_types/types";
+import { IAuth } from "../types/types";
 import { useForm } from "react-hook-form";
 import { Navbar } from "../components/Navbar";
 

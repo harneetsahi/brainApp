@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { IContent } from "../store_and_types/types";
+import { IContent } from "../types/types";
 import { Button } from "./Button";
 import { InputDiv } from "./InputDiv";
 import { usePostContents } from "../hooks/useContentQueries";

@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import { useDeleteContent, useGetContents } from "../hooks/useContentQueries";
 import { LoaderIcon } from "../icons/LoaderIcon";
 import { PlusIcon } from "../icons/PlusIcon";
-import { IContent } from "../store_and_types/types";
+import { IContent } from "../types/types";
 
 import { Card } from "./Card";
 import { CreateContentModal } from "./CreateContentModal";
