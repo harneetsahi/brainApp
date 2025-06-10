@@ -20,7 +20,7 @@ export const Header = () => {
 
   return (
     <>
-      <header className="flex justify-center  pt-6 pb-12  relative">
+      <header className="flex justify-center  pt-10 pb-12  relative sm:mx-5">
         <h1 className=" text-2xl " style={{ fontFamily: "Italiana" }}>
           KeepNote
         </h1>

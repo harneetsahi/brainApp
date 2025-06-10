@@ -69,7 +69,7 @@ export const HomeSection = () => {
 
       <section
         ref={containerRef}
-        className="flex flex-wrap gap-7 mt-15 pb-20 xl:justify-normal justify-center relative"
+        className="flex flex-wrap gap-7 mt-15 pb-20 sm:px-5 xl:justify-normal justify-center relative"
       >
         {isPending && (
           <div className="flex justify-center mt-20 w-full">

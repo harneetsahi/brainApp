@@ -20,7 +20,7 @@ export const Sidebar = () => {
   }
 
   return (
-    <aside className="h-screen fixed border-r dark:border-zinc-700 border-zinc-200 sm:w-50 py-5 px-2 bg-white dark:bg-zinc-800 flex flex-col justify-between">
+    <aside className="h-screen fixed border-r dark:border-zinc-700 border-zinc-200 sm:w-50 py-7 px-3 bg-white dark:bg-zinc-800 flex flex-col justify-between">
       <div>
         <Link to="/" className={listStyles}>
           <NotesIcon className="size-6" />

@@ -6,10 +6,10 @@ export function Navbar() {
   return (
     <>
       <div className="">
-        <Link to="/" className="absolute top-4 left-4">
+        <Link to="/" className="absolute top-8 left-8">
           <NotesIcon className="size-8  cursor-pointer " />
         </Link>
-        <Theme className="w-max absolute top-4 right-4" size="size-5" />
+        <Theme className="w-max absolute top-7 right-8" size="size-5" />
       </div>
     </>
   );

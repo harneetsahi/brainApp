@@ -6,10 +6,12 @@ function Dashboard() {
   return (
     <>
       <Sidebar />
-      <main className="px-3 sm:px-5 flex-1 ml-14 sm:ml-50 min-h-screen  max-w-600 mx-auto  ">
-        <Header />
-        <HomeSection />
-      </main>
+      <div className=" flex flex-col items-center justify-center ">
+        <main className="px-3 sm:px-5 flex-1 ml-14 sm:ml-50 min-h-screen  max-w-600  ">
+          <Header />
+          <HomeSection />
+        </main>
+      </div>
     </>
   );
 }
