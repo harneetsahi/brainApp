@@ -2,13 +2,14 @@
   "name": "brainapp",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "build": "tsc -b",
     "start": "node dist/index.js",
     "dev": "npm run build && npm run start"
   },
   "keywords": [],
-  "author": "",
+  "author": "harneetsahi",
   "license": "ISC",
   "description": "",
   "devDependencies": {
@@ -20,6 +21,7 @@
     "typescript": "^5.7.3"
   },
   "dependencies": {
+    "@types/node": "^22.15.30",
     "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",

@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
-import { User } from "../schema/user.schema";
+import { User } from "../schema/user.schema.js";
 
 async function userAuth(req: Request, res: Response, next: NextFunction) {
   const token = req.cookies.jwt;

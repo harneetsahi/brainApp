@@ -2,10 +2,10 @@ import { Request, Response } from "express";
 import { z } from "zod";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import random from "../utils";
-import { User } from "../schema/user.schema";
-import { Content } from "../schema/content.schema";
-import { Link } from "../schema/link.schema";
+import random from "../utils/index.js";
+import { User } from "../schema/user.schema.js";
+import { Content } from "../schema/content.schema.js";
+import { Link } from "../schema/link.schema.js";
 
 async function signup(req: Request, res: Response) {
   const requiredBody = z.object({

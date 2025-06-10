@@ -1,5 +1,5 @@
 import { Router } from "express";
-import userAuth from "../middlewares/user.auth";
+import userAuth from "../middlewares/user.auth.js";
 import {
   signup,
   login,
@@ -12,7 +12,7 @@ import {
   stopSharingNotes,
   getSharedNotes,
   updatePassword,
-} from "../controllers/user.controllers";
+} from "../controllers/user.controllers.js";
 
 const userRouter = Router();
 
