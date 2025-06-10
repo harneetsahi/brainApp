@@ -98,7 +98,15 @@ export const useShareNotes = () => {
   return useMutation({
     mutationFn: shareNotes,
     onSuccess: async (data: string) => {
-      let linkToCopy = `http://localhost:5173/notes/share/${data}`;
+      let link;
+
+      if (import.meta.env.MODE === "development") {
+        link = "http://localhost:5173/notes/share";
+      } else {
+        link = window.location.origin + "/notes/share";
+      }
+
+      let linkToCopy = `${link}/${data}`;
 
       await navigator.clipboard.writeText(linkToCopy);
 
