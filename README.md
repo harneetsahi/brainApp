@@ -12,6 +12,7 @@ KeepNote is a web application where users can create and share notes.
 - TypeScript
 - ReactJS
 - Tailwind
+- Tanstack query
 - React Hook Forms
 - MongoDB
 
